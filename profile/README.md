@@ -1,9 +1,9 @@
-# MedicaLink Healthcare Ecosystem
+# 🏥 MedicaLink Healthcare Ecosystem
 **A High-Performance Microservices Platform & AI-Powered Doctor Recommendation Engine**
 
 ---
 
-## System Architecture & AI RAG Flow
+## 🏗️ System Architecture & AI RAG Flow
 
 The Medicalink platform employs a distributed Microservices architecture. The core transaction services run on Node.js (NestJS), while the heavy AI computations and vector searches are isolated in a dedicated Python service.
 
@@ -34,74 +34,73 @@ flowchart TD
         RMQ{"RabbitMQ (AMQP)"}:::bus
     end
 
-    %% 4. Core Node.js Services (Monorepo)
-    subgraph CoreServices["NestJS Microservices (medicalink-microservice)"]
+    %% 4. Core Node.js Services
+    subgraph CoreServices["NestJS Microservices"]
         ACC["Accounts Service"]:::svc
         PROV["Provider Directory Service"]:::svc
         BOOK["Booking Service"]:::svc
         ORCH["Orchestrator Service"]:::svc
     end
 
-    %% 5. AI Python Service (Standalone Repo)
-    subgraph AIServiceLayer["AI Recommendation Engine (medicalink-ai-service)"]
-        AIWorker["AI RAG Worker (Python/LangChain)"]:::ai
+    %% 5. AI Python Service
+    subgraph AIServiceLayer["AI Engine"]
+        AIWorker["AI RAG Worker (Python)"]:::ai
         SyncBatch["Batch Sync Script"]:::ai
     end
 
-    %% 6. Data Persistence & Cache
-    subgraph Infrastructure["Databases & Caching"]
-        Postgres[("PostgreSQL (Schema-separated)")]:::db
-        Redis[("Redis (Cache & Queue)")]:::db
-        Qdrant[("Qdrant (Vector Database)")]:::db
+    %% 6. Infrastructure
+    subgraph Infrastructure["Infrastructure"]
+        Postgres[("PostgreSQL")]:::db
+        Redis[("Redis")]:::db
+        Qdrant[("Qdrant (Vector DB)")]:::db
     end
 
     %% 7. External LLM APIs
     subgraph ExternalAPIs["External AI Models"]
-        OpenAI(["OpenAI (Embeddings & Chat)"]):::ext
-        Gemini(["Google Gemini (Chat)"]):::ext
+        OpenAI(["OpenAI"]):::ext
+        Gemini(["Google Gemini"]):::ext
     end
 
-    %% --- Relationships and Data Flow ---
+    %% Relationships
+    WebPatient & WebStaff --> Gateway
+    Gateway -- "RPC" --> RMQ
+    RMQ -- "Consume Task" --> AIWorker
+    AIWorker -- "Search" --> Qdrant
+    AIWorker -- "LLM" --> OpenAI & Gemini
+    CoreServices -.-> Postgres & Redis
+    PROV -- "Events" --> RMQ
+    RMQ -- "Sync" --> AIWorker
+    SyncBatch -.-> Gateway & Qdrant
+````
 
-    %% Client to Gateway
-    WebPatient -- "HTTP POST (Symptoms)" --> Gateway
-    WebStaff -- "HTTP/REST" --> Gateway
+## 📂 Explore the Repositories
 
-    %% Gateway to Microservices & AI
-    Gateway -- "RPC: account.* / booking.*" --> ACC & BOOK
-    Gateway -- "RPC: ai.doctor-recommendation.request" --> RMQ
+| Repository | Primary Tech Stack | Description |
+| :--- | :--- | :--- |
+| [**medicalink-microservice**](https://www.google.com/url?sa=E&source=gmail&q=https://github.com/MedicaLink-Healthcare/medicalink-microservice) | NestJS, Prisma, RabbitMQ | The core backend engine featuring 7 microservices, event-driven architecture, and Saga orchestration. |
+| [**medicalink-ai-service**](https://www.google.com/search?q=https://github.com/MedicaLink-Healthcare/medicalink-ai-service) | Python, LangChain, Qdrant | Intelligent recommendation worker implementing Hybrid Search RAG to match patients with doctors. |
+| [**medicalink-web-client**](https://www.google.com/search?q=https://github.com/MedicaLink-Healthcare/medicalink-web-client) | React, TypeScript, Tailwind | Patient-facing portal for booking appointments and interacting with the AI medical assistant. |
+| [**medicalink-web-staff**](https://www.google.com/search?q=https://github.com/MedicaLink-Healthcare/medicalink-web-staff) | React, TanStack, Shadcn | Advanced dashboard for Doctors and Admins to manage schedules, profiles, and hospital resources. |
 
-    %% Core Services DB Access
-    ACC -.-> |"schema: accounts"| Postgres
-    PROV -.-> |"schema: provider"| Postgres
-    BOOK -.-> |"schema: booking"| Postgres
-    ACC & PROV -.-> |"Cache"| Redis
+## 💡 Key Architectural Highlights
 
-    %% Event-driven AI Ingestion
-    PROV -- "Publishes: doctor.profile.created/updated" --> RMQ
-    RMQ -- "Consumes Event" --> AIWorker
-    AIWorker -- "1. Embed text" --> OpenAI
-    AIWorker -- "2. Upsert Vector (Hybrid)" --> Qdrant
+  * **Logic & Resource Isolation:** By decoupling the **Python AI Service** from the **NestJS Core Microservices**, we ensure that heavy LLM computations do not impact critical booking transactions.
+  * **Event-Driven Integration:** **RabbitMQ** manages both real-time **RPC requests** and **Asynchronous Events** (Pub/Sub) to keep the Qdrant vector index synchronized.
+  * **Advanced RAG Pipeline:** Implements *Hybrid Search (Dense + Sparse) -\> FlashRank Reranking -\> Contextual Generation* to eliminate AI hallucinations.
+  * **Infrastructure Efficiency:** Utilizing **PostgreSQL with Schema-level separation** provides isolation while significantly reducing operational costs.
 
-    %% RAG Retrieval Flow
-    RMQ -- "RPC Request (Symptoms)" --> AIWorker
-    AIWorker -- "1. Embed Question" --> OpenAI
-    AIWorker -- "2. Hybrid Search (Dense+Sparse) & Rerank" --> Qdrant
-    AIWorker -- "3. Generate Contextual Response" --> OpenAI & Gemini
-    AIWorker -- "4. Return JSON (doctor_id)" --> RMQ
-    RMQ -- "Reply" --> Gateway
+-----
 
-    %% Batch Sync Flow
-    SyncBatch -.-> |"GET /api/doctors/profile/public"| Gateway
-    SyncBatch -.-> |"Batch Upsert Vectors"| Qdrant
+📫 **Contact for work:** [dinhducbkdn2004@gmail.com](mailto:dinhducbkdn2004@gmail.com)
+
 ```
-Key Architectural Highlights
-Logic & Resource Isolation: By decoupling the Python AI Service from the NestJS Core Microservices, we ensure that heavy LLM computations and vector searches do not impact the performance or stability of critical booking transactions.
 
-Event-Driven Integration: RabbitMQ acts as the system's central nervous system. It manages both real-time RPC requests for doctor recommendations and Asynchronous Events (Pub/Sub) to keep the Qdrant vector index synchronized.
+---
 
-Advanced RAG Pipeline: The system implements a sophisticated workflow: Hybrid Search (Dense + Sparse) -> FlashRank Reranking -> Contextual Generation (OpenAI/Gemini) to eliminate AI hallucinations.
+### Important Notes:
+1.  **Check the Links:** I used placeholder URLs (e.g., `https://github.com/MedicaLink-Healthcare/medicalink-microservice`). Make sure the names match your actual repository names exactly.
+2.  **Organization View:** Once you save this in `.github/profile/README.md`, it will appear beautifully on your main organization page.
+3.  **Pinned Repos:** On your Organization's **Overview** tab, click **"Customize your pins"** and select these 4 main repositories so they appear as big cards right at the top.
 
-Infrastructure Efficiency: Utilizing PostgreSQL with Schema-level separation provides the logical isolation required by a microservices architecture while significantly reducing operational costs.
-
-Contact for work: dinhducbkdn2004@gmail.com
+This setup makes your GitHub look like a professional tech startup! Great job, Định Đức.
+```
