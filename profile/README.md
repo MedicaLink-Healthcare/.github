@@ -94,3 +94,14 @@ flowchart TD
     %% Batch Sync Flow
     SyncBatch -.-> |"GET /api/doctors/profile/public"| Gateway
     SyncBatch -.-> |"Batch Upsert Vectors"| Qdrant
+```
+Key Architectural Highlights
+Logic & Resource Isolation: By decoupling the Python AI Service from the NestJS Core Microservices, we ensure that heavy LLM computations and vector searches do not impact the performance or stability of critical booking transactions.
+
+Event-Driven Integration: RabbitMQ acts as the system's central nervous system. It manages both real-time RPC requests for doctor recommendations and Asynchronous Events (Pub/Sub) to keep the Qdrant vector index synchronized.
+
+Advanced RAG Pipeline: The system implements a sophisticated workflow: Hybrid Search (Dense + Sparse) -> FlashRank Reranking -> Contextual Generation (OpenAI/Gemini) to eliminate AI hallucinations.
+
+Infrastructure Efficiency: Utilizing PostgreSQL with Schema-level separation provides the logical isolation required by a microservices architecture while significantly reducing operational costs.
+
+Contact for work: dinhducbkdn2004@gmail.com
