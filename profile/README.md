@@ -1,9 +1,9 @@
-# 🏥 MedicaLink Healthcare Ecosystem
+# MedicaLink Healthcare Ecosystem
 **A High-Performance Microservices Platform & AI-Powered Doctor Recommendation Engine**
 
 ---
 
-## 🏗️ System Architecture & AI RAG Flow
+## System Architecture & AI RAG Flow
 
 The Medicalink platform employs a distributed Microservices architecture. The core transaction services run on Node.js (NestJS), while the heavy AI computations and vector searches are isolated in a dedicated Python service.
 
@@ -73,16 +73,16 @@ flowchart TD
     SyncBatch -.-> Gateway & Qdrant
 ````
 
-## 📂 Explore the Repositories
+## Explore the Repositories
 
 | Repository | Primary Tech Stack | Description |
 | :--- | :--- | :--- |
-| [**medicalink-microservice**](https://www.google.com/url?sa=E&source=gmail&q=https://github.com/MedicaLink-Healthcare/medicalink-microservice) | NestJS, Prisma, RabbitMQ | The core backend engine featuring 7 microservices, event-driven architecture, and Saga orchestration. |
-| [**medicalink-ai-service**](https://www.google.com/search?q=https://github.com/MedicaLink-Healthcare/medicalink-ai-service) | Python, LangChain, Qdrant | Intelligent recommendation worker implementing Hybrid Search RAG to match patients with doctors. |
-| [**medicalink-web-client**](https://www.google.com/search?q=https://github.com/MedicaLink-Healthcare/medicalink-web-client) | React, TypeScript, Tailwind | Patient-facing portal for booking appointments and interacting with the AI medical assistant. |
-| [**medicalink-web-staff**](https://www.google.com/search?q=https://github.com/MedicaLink-Healthcare/medicalink-web-staff) | React, TanStack, Shadcn | Advanced dashboard for Doctors and Admins to manage schedules, profiles, and hospital resources. |
+| [**medicalink-microservice**](https://github.com/MedicaLink-Healthcare/medicalink-microservice) | NestJS, Prisma, Redis, RabbitMQ, PostgreSQL | The core backend engine featuring 7 microservices, event-driven architecture, and Saga orchestration. |
+| [**medicalink-ai-service**](https://github.com/MedicaLink-Healthcare/medicalink-ai-service) | Python, LangChain, Qdrant | Intelligent recommendation worker implementing Hybrid Search RAG to match patients with doctors. |
+| [**medicalink-fe-client**](https://github.com/MedicaLink-Healthcare/medicalink-fe-client) | React, TypeScript, Tailwind | Patient-facing portal for booking appointments and interacting with the AI medical assistant. |
+| [**medicalink-fe-staff**](https://github.com/MedicaLink-Healthcare/medicalink-fe-staff) | React, TypeScript, TanStack, Shadcn | Advanced dashboard for Doctors and Admins to manage schedules, profiles, and hospital resources. |
 
-## 💡 Key Architectural Highlights
+## Key Architectural Highlights
 
   * **Logic & Resource Isolation:** By decoupling the **Python AI Service** from the **NestJS Core Microservices**, we ensure that heavy LLM computations do not impact critical booking transactions.
   * **Event-Driven Integration:** **RabbitMQ** manages both real-time **RPC requests** and **Asynchronous Events** (Pub/Sub) to keep the Qdrant vector index synchronized.
