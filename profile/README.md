@@ -1,9 +1,9 @@
-# 🏥 MedicaLink Healthcare Ecosystem
+# MedicaLink Healthcare Ecosystem
 **A High-Performance Microservices Platform & AI-Powered Doctor Recommendation Engine**
 
 ---
 
-## 🏗️ System Architecture & AI RAG Flow
+## System Architecture & AI RAG Flow
 
 The Medicalink platform employs a distributed Microservices architecture. The core transaction services run on Node.js (NestJS), while the heavy AI computations and vector searches are isolated in a dedicated Python service.
 
