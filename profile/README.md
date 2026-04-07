@@ -1,3 +1,8 @@
+# MedicaLink Healthcare Ecosystem
+**A High-Performance Microservices Platform & AI-Powered Doctor Recommendation Engine**
+
+---
+
 ## System Architecture & AI RAG Flow
 
 The Medicalink platform employs a distributed Microservices architecture. The core transaction services run on Node.js (NestJS), while the heavy AI computations and vector searches are isolated in a dedicated Python service.
@@ -90,11 +95,13 @@ flowchart TD
     SyncBatch -.-> |"GET /api/doctors/profile/public"| Gateway
     SyncBatch -.-> |"Batch Upsert Vectors"| Qdrant
     
-## 💡 Key Architectural Decisions
+Key Architectural Highlights
+Logic & Resource Isolation: By decoupling the Python AI Service from the NestJS Core Microservices, we ensure that heavy LLM computations and vector searches do not impact the performance or stability of critical booking transactions.
 
-Tại sao kiến trúc này lại tối ưu cho dự án Medicalink?
+Event-Driven Integration: RabbitMQ acts as the system's central nervous system. It manages both real-time RPC requests for doctor recommendations and Asynchronous Events (Pub/Sub) to keep the Qdrant vector index synchronized.
 
-1. **Service Isolation (Tách biệt dịch vụ):** Việc tách riêng AI Service (Python) khỏi core microservices (NestJS) giúp đảm bảo các tác vụ tính toán nặng của AI không gây ảnh hưởng đến hiệu năng của luồng Đặt lịch khám (Booking).
-2. **Event-Driven Integration:** RabbitMQ đóng vai trò trung tâm điều phối. Nó không chỉ xử lý các yêu cầu gợi ý bác sĩ (RPC) mà còn tự động cập nhật dữ liệu vector vào Qdrant mỗi khi có bác sĩ mới đăng ký (Pub/Sub), đảm bảo dữ liệu AI luôn mới nhất.
-3. **Advanced RAG Pipeline:** Hệ thống không chỉ tìm kiếm văn bản đơn thuần mà triển khai luồng RAG phức tạp: *Embedding -> Hybrid Search (Qdrant) -> Reranking -> LLM Generation (OpenAI/Gemini)* để loại bỏ hiện tượng AI "ảo giác".
-4. **Optimized Infrastructure:** Sử dụng PostgreSQL với cơ chế chia Schema để vừa đảm bảo tính cô lập dữ liệu giữa các dịch vụ, vừa tối ưu chi phí vận hành trên môi trường Cloud.
+Advanced RAG Pipeline: The system implements a sophisticated workflow: Hybrid Search (Dense + Sparse) -> FlashRank Reranking -> Contextual Generation (OpenAI/Gemini) to eliminate AI hallucinations.
+
+Infrastructure Efficiency: Utilizing PostgreSQL with Schema-level separation provides the logical isolation required by a microservices architecture while significantly reducing operational costs.
+
+Contact for work: dinhducbkdn2004@gmail.com
