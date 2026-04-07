@@ -92,15 +92,3 @@ flowchart TD
 -----
 
 📫 **Contact for work:** [dinhducbkdn2004@gmail.com](mailto:dinhducbkdn2004@gmail.com)
-
-```
-
----
-
-### Important Notes:
-1.  **Check the Links:** I used placeholder URLs (e.g., `https://github.com/MedicaLink-Healthcare/medicalink-microservice`). Make sure the names match your actual repository names exactly.
-2.  **Organization View:** Once you save this in `.github/profile/README.md`, it will appear beautifully on your main organization page.
-3.  **Pinned Repos:** On your Organization's **Overview** tab, click **"Customize your pins"** and select these 4 main repositories so they appear as big cards right at the top.
-
-This setup makes your GitHub look like a professional tech startup! Great job, Định Đức.
-```
