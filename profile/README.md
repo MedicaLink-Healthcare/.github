@@ -91,4 +91,4 @@ flowchart TD
 
 -----
 
-📫 **Contact for work:** [dinhducbkdn2004@gmail.com](mailto:dinhducbkdn2004@gmail.com)
+**Contact for work:** [dinhducbkdn2004@gmail.com](mailto:dinhducbkdn2004@gmail.com)
