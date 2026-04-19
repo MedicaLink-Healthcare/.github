@@ -78,7 +78,7 @@ flowchart TD
 | Repository | Primary Tech Stack | Description |
 | :--- | :--- | :--- |
 | [**medicalink-microservice**](https://github.com/MedicaLink-Healthcare/medicalink-microservice) | NestJS, Prisma, Redis, RabbitMQ, PostgreSQL | The core backend engine featuring 7 microservices, event-driven architecture, and Saga orchestration. |
-| [**medicalink-ai-service**](https://github.com/MedicaLink-Healthcare/medicalink-ai-service) | Python, LangChain, Qdrant | Intelligent recommendation worker implementing Hybrid Search RAG to match patients with doctors. |
+| [**medicalink-ai-service**](https://github.com/MedicaLink-Healthcare/medicalink-ai-service) | Python, Qdrant | Intelligent recommendation worker implementing Hybrid Search RAG to match patients with doctors. |
 | [**medicalink-fe-client**](https://github.com/MedicaLink-Healthcare/medicalink-fe-client) | React, TypeScript, Tailwind | Patient-facing portal for booking appointments and interacting with the AI medical assistant. |
 | [**medicalink-fe-staff**](https://github.com/MedicaLink-Healthcare/medicalink-fe-staff) | React, TypeScript, TanStack, Shadcn | Advanced dashboard for Doctors and Admins to manage schedules, profiles, and hospital resources. |
 
