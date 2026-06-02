@@ -44,7 +44,7 @@ flowchart TD
 
     %% 5. AI Python Service
     subgraph AIServiceLayer["AI Engine"]
-        AIWorker["AI RAG Worker (Python)"]:::ai
+        AIWorker["AI Clinical RAG Worker"]:::ai
         SyncBatch["Batch Sync Script"]:::ai
     end
 
@@ -65,20 +65,20 @@ flowchart TD
     WebPatient & WebStaff --> Gateway
     Gateway -- "RPC" --> RMQ
     RMQ -- "Consume Task" --> AIWorker
-    AIWorker -- "Search" --> Qdrant
-    AIWorker -- "LLM" --> OpenAI & Gemini
+    AIWorker -- "Parallel Diverse Search" --> Qdrant
+    AIWorker -- "LLM Extraction" --> OpenAI & Gemini
     CoreServices -.-> Postgres & Redis
     PROV -- "Events" --> RMQ
     RMQ -- "Sync" --> AIWorker
     SyncBatch -.-> Gateway & Qdrant
-````
+```
 
 ## Explore the Repositories
 
 | Repository | Primary Tech Stack | Description |
 | :--- | :--- | :--- |
 | [**medicalink-microservice**](https://github.com/MedicaLink-Healthcare/medicalink-microservice) | NestJS, Prisma, Redis, RabbitMQ, PostgreSQL | The core backend engine featuring 7 microservices, event-driven architecture, and Saga orchestration. |
-| [**medicalink-ai-service**](https://github.com/MedicaLink-Healthcare/medicalink-ai-service) | Python, Qdrant | Intelligent recommendation worker implementing Hybrid Search RAG to match patients with doctors. |
+| [**medicalink-ai-service**](https://github.com/MedicaLink-Healthcare/medicalink-ai-service) | Python, Qdrant | Intelligent recommendation worker implementing Parallel Diverse Retrieval and Intent-Aware Multi-Factor Reranking. |
 | [**medicalink-fe-client**](https://github.com/MedicaLink-Healthcare/medicalink-fe-client) | React, TypeScript, Tailwind | Patient-facing portal for booking appointments and interacting with the AI medical assistant. |
 | [**medicalink-fe-staff**](https://github.com/MedicaLink-Healthcare/medicalink-fe-staff) | React, TypeScript, TanStack, Shadcn | Advanced dashboard for Doctors and Admins to manage schedules, profiles, and hospital resources. |
 
@@ -86,8 +86,8 @@ flowchart TD
 
   * **Logic & Resource Isolation:** By decoupling the **Python AI Service** from the **NestJS Core Microservices**, we ensure that heavy LLM computations do not impact critical booking transactions.
   * **Event-Driven Integration:** **RabbitMQ** manages both real-time **RPC requests** and **Asynchronous Events** (Pub/Sub) to keep the Qdrant vector index synchronized.
-  * **Advanced RAG Pipeline:** Implements *Hybrid Search (Dense + Sparse) -\> FlashRank Reranking -\> Contextual Generation* to eliminate AI hallucinations.
-  * **Infrastructure Efficiency:** Utilizing **PostgreSQL with Schema-level separation** provides isolation while significantly reducing operational costs.
+  * **Advanced Clinical RAG Pipeline:** Solves semantic retrieval bias (Vector Bleeding) using *Parallel Diverse Retrieval* and an *Intent-Aware Multi-Factor Reranker* (combining FlashRank, Clinical Priors, and Demographics) to eliminate AI hallucinations.
+  * **Infrastructure Efficiency:** Utilizing **PostgreSQL with Schema-level separation** provides robust multi-service data isolation while significantly reducing operational costs.
 
 -----
 
